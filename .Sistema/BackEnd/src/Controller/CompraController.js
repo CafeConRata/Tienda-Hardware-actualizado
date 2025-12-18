@@ -161,63 +161,61 @@ const obtenerFactura = (req, res) => {
 // Registrar compra en Excel
 const registrarCompraExcel = async (compraId, items, total) => {
     const workbook = new ExcelJS.Workbook();
-
-    // 📂 Definimos la carpeta donde se guardará el Excel
     const reportesDir = path.join(__dirname, "../reports");
+    const filePath = path.join(reportesDir, "compras_diarias.xlsx");
 
+    // Crear carpeta si no existe
     if (!fs.existsSync(reportesDir)) {
         fs.mkdirSync(reportesDir, { recursive: true });
     }
 
-    const filePath = path.join(reportesDir, "compras_diarias.xlsx");
-    await workbook.xlsx.writeFile(filePath);
-
-    try {
-        // 🔎 Intentamos leer el archivo si ya existe
+    // Si el archivo existe, lo leemos
+    if (fs.existsSync(filePath)) {
         await workbook.xlsx.readFile(filePath);
-    } catch {
-        // 📑 Si no existe, creamos una nueva hoja
-        workbook.addWorksheet("Compras");
     }
-    // 📑 Obtenemos la hoja "Compras" (o la creamos si no estaba)
-    const sheet = workbook.getWorksheet("Compras") || workbook.addWorksheet("Compras");
 
-    // Si es la primera vez, agregamos encabezados
-    if (sheet.rowCount === 0) {
+    // Obtener o crear hoja
+    let sheet = workbook.getWorksheet("Compras");
+    if (!sheet) {
+        sheet = workbook.addWorksheet("Compras");
         sheet.addRow(["Fecha", "ID Compra", "Producto", "Cantidad", "Precio", "Total"]);
     }
 
-    // Agregar cada producto como fila
-    items.forEach((item) => {
+    // Agregar filas
+    items.forEach(item => {
         sheet.addRow([
             new Date().toLocaleDateString(),
             compraId,
             item.Nombre,
             item.Cantidad,
-            item.Precio,
-            total,
+            item.Total,
+            item.Total * item.Cantidad
         ]);
     });
 
+    // Guardar archivo
     await workbook.xlsx.writeFile(filePath);
 };
 
 // Servir el Excel de compras diarias
 const obtenerExcelCompras = (req, res) => {
-    const reportesDir = path.resolve(__dirname, "../reports");
-    const filePath = path.join(reportesDir, "compras_diarias.xlsx");
+    const filePath = path.join(__dirname, "../reports/compras_diarias.xlsx");
 
-    console.log("Buscando Excel en:", filePath);
+    console.log("Descargando Excel desde:", filePath);
 
-    if (fs.existsSync(filePath)) {
-        res.download(filePath, (err) => {
+    if (!fs.existsSync(filePath)) {
+        return res.status(404).json({ error: "Archivo de compras no encontrado" });
+    }
+
+    res.sendFile(
+        "compras_diarias.xlsx",
+        { root: path.join(__dirname, "../reports") },
+        (err) => {
             if (err) {
-                console.error("Error al enviar el Excel:", err.message);
+                console.error("Error real al enviar Excel:", err);
                 res.status(500).json({ error: "Error al enviar el Excel" });
             }
-        });
-    } else {
-        res.status(404).json({ error: "Archivo de compras no encontrado" });
-    }
+        }
+    );
 };
 module.exports = { finalizarCompra, obtenerFactura, obtenerExcelCompras };
