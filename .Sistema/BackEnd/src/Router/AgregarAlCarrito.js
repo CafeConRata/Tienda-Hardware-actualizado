@@ -10,7 +10,7 @@ const {
     } = require('../Controller/CarritoController');
 const verificarToken = require('../Middlewares/auth');
 
-// agregar producto al carrito
+// agregar producto al carrito y modificarlo
 router.post('/agregar', verificarToken, AgregarAlCarrito);
 router.get('/ver', verificarToken, verCarrito);
 router.delete('/eliminar/:id', verificarToken, EliminarProducto);

@@ -43,7 +43,7 @@ async function Login(req, res) {
                 token: token,
                 usuario: {
                     id: usuario.Id,
-                    nombre: usuario.Name,     // ✅ ahora sí coincide con la columna
+                    nombre: usuario.Name,    
                     rol: usuario.Id_rol
                 }
             });

@@ -6,12 +6,12 @@ const path = require("path");
 
 
 
-// Finalizar compra (versión simplificada sin Id_usuario)
+// Finalizar compra 
 const finalizarCompra = async (req, res) => {
     try {
         const fecha = new Date().toISOString().split("T")[0];
 
-        // 1. Traer todos los productos del carrito (sin filtrar por usuario)
+        // 1. Traer todos los productos del carrito
         const carrito = await new Promise((resolve, reject) => {
             db.all("SELECT * FROM Carrito", [], (err, rows) => {
                 if (err) reject(err);
@@ -31,7 +31,7 @@ const finalizarCompra = async (req, res) => {
         );
         console.log("Carrito recuperado:", carrito);
         console.log("Total calculado:", total);
-        // 3. Insertar la compra en la tabla Compra (sin Id_usuario)
+        // 3. Insertar la compra en la tabla Compra
         const compraId = await new Promise((resolve, reject) => {
             db.run(
                 "INSERT INTO Compra (Fecha, Total, Estado) VALUES (?, ?, ?)",
@@ -88,7 +88,7 @@ const finalizarCompra = async (req, res) => {
 const generarFacturaPDF = (compraId, items, total) => {
     const doc = new PDFDocument({ margin: 50 });
 
-    // 📂 Carpeta de facturas
+    // Carpeta de facturas
     const facturasDir = path.join(__dirname, "../facturas");
     if (!fs.existsSync(facturasDir)) {
         fs.mkdirSync(facturasDir, { recursive: true });
@@ -97,14 +97,14 @@ const generarFacturaPDF = (compraId, items, total) => {
     const filePath = path.join(facturasDir, `factura_${compraId}.pdf`);
     doc.pipe(fs.createWriteStream(filePath));
 
-    // 🏷️ Encabezado con estilo
+
     doc.fontSize(22).fillColor("#333").text("Factura de Compra", { align: "center" });
     doc.moveDown();
     doc.fontSize(12).fillColor("#555").text(`Compra N°: ${compraId}`);
     doc.text(`Fecha: ${new Date().toLocaleDateString()}`);
     doc.moveDown();
 
-    // 📋 Encabezado de tabla
+  
     doc.fontSize(12).fillColor("#000");
     doc.text("Producto", 50, doc.y, { continued: true });
     doc.text("Cantidad", 200, doc.y, { continued: true });
@@ -112,7 +112,7 @@ const generarFacturaPDF = (compraId, items, total) => {
     doc.text("Subtotal", 430, doc.y);
     doc.moveDown();
 
-    // 📦 Listar productos con columnas alineadas
+
     items.forEach((item) => {
         const precioUnitario = item.Precio || ((Number(item.Total) || 0) / (Number(item.Cantidad) || 1));
         const subtotal = precioUnitario * (item.Cantidad || 1);
@@ -126,10 +126,9 @@ const generarFacturaPDF = (compraId, items, total) => {
     doc.moveDown();
     doc.moveDown();
 
-    // 💰 Total con estilo destacado
+
     doc.fontSize(14).fillColor("#000").text(`TOTAL: $${total}`, { align: "right" });
 
-    // 📌 Pie de página
     doc.moveDown();
     doc.fontSize(10).fillColor("#777").text("Gracias por su compra", { align: "center" });
     doc.text("Tienda Hardware - contacto@tienda.com", { align: "center" });
@@ -147,7 +146,7 @@ const obtenerFactura = (req, res) => {
     console.log("Buscando factura en:", facturaPath);
 
     if (fs.existsSync(facturaPath)) {
-        // ✅ Enviamos el archivo usando root explícito
+
         res.sendFile(facturaNombre, { root: facturaDir }, (err) => {
             if (err) {
                 console.error("Error al enviar la factura:", err);

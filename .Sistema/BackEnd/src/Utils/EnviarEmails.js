@@ -12,13 +12,16 @@ const DatosEmail = nodemailer.createTransport({
 
 // ---> Función para enviar correo de verificación
 async function EnviarCorreo(Nombre, Email, TokenEmail) {
+
     // ---> Configuración del correo
     const hipervinculo_validacion = `http://localhost:3000/api/verificacion/${TokenEmail}`;
+    
     // ---> Opciones del correo
     const opciones = {
         from: process.env.EMAIL_USER,
         to: Email,
         subject: "Utilize esto para confirmar Su Cuenta y Crearla",
+
         // ---> Cuerpo del correo
         html: `
       <div style="

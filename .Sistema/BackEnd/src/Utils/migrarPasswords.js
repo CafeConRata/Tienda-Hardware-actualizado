@@ -16,16 +16,16 @@ async function migrarPasswords() {
             for (const usuario of rows) {
                 const plainPassword = usuario.Password;
 
-                // Si ya parece un hash (empieza con $2b$ o $2a$), lo dejamos
+            
                 if (plainPassword.startsWith("$2b$") || plainPassword.startsWith("$2a$")) {
                     console.log(`Usuario ${usuario.Id} ya tiene hash, se salta.`);
                     continue;
                 }
 
-                // 2. Generar hash
+                // Generar hash
                 const hashedPassword = await EncriptarPassword(plainPassword);
 
-                // 3. Actualizar la DB
+                // Actualizar la DB
                 db.run(
                     "UPDATE Usuarios SET Password = ? WHERE Id = ?",
                     [hashedPassword, usuario.Id],
