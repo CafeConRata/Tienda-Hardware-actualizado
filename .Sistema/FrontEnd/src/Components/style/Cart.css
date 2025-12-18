@@ -1,0 +1,61 @@
+/* CARRITO */
+.cart-sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 320px;
+    height: 100vh;
+    background: white;
+    box-shadow: -2px 0 12px rgba(0,0,0,0.2);
+    padding: 20px;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.close-cart {
+    background: #000;
+    color: #fff;
+    padding: 10px;
+    border-radius: 6px;
+}
+/* Fondo transparente */
+.cart-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.45); /* ⬆️ FONDO TRANSPARENTE REAL */
+    backdrop-filter: blur(2px);      /* blur suave opcional */
+    display: flex;
+    justify-content: flex-end;       /* carrito a la derecha */
+    align-items: stretch;
+    z-index: 3000;
+}
+
+/* Panel del carrito */
+.cart-modal {
+    background: white;
+    width: 340px;
+    height: 100%;
+    box-shadow: -4px 0 15px rgba(0,0,0,0.2);
+    padding: 20px;
+    overflow-y: auto;
+    position: relative;
+}
+
+/* ANIMACIÓN SLIDE-IN DESDE LA DERECHA */
+.slide-in {
+    animation: slideIn 0.35s ease forwards;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}

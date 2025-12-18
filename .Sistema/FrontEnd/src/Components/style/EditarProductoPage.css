@@ -1,0 +1,99 @@
+/* Fondo general */
+.editar-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+/* Card del formulario */
+.form-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    padding: 2rem;
+    width: 100%;
+    max-width: 400px;
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Título */
+.form-card h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1.5rem;
+
+    /* Degradado celeste */
+    background-image: linear-gradient(90deg, #0ea5e9, #3b82f6);
+
+    /* Clip del fondo al texto (estándar + WebKit) */
+    background-clip: text;
+    -webkit-background-clip: text;
+
+    /* Texto transparente para ver el degradado (estándar + WebKit) */
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Inputs */
+.form-card input[type="text"],
+.form-card input[type="number"],
+.form-card input[type="file"] {
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    margin-bottom: 1rem; /* 🔹 separación entre campos */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-card input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+    outline: none;
+}
+
+/* Botones */
+.form-card .btn {
+    flex: 1;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-guardar {
+    background: linear-gradient(135deg, #3b82f6, #0ea5e9);
+    color: #fff;
+}
+
+.btn-guardar:hover {
+    background: linear-gradient(135deg, #2563eb, #0284c7);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.btn-cancelar {
+    background: #9ca3af;
+    color: #fff;
+}
+
+.btn-cancelar:hover {
+    background: #6b7280;
+}
+
+/* Animación */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
